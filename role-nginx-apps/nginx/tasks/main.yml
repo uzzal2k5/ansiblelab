@@ -1,0 +1,41 @@
+---
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Ensure nginx is at the latest version
+  apt:
+    name: nginx
+    state: latest
+
+- name: Ansible copy certs directory to the remote server
+  copy:
+    src: certs
+    dest: "{{CONF_D}}/"
+    owner: "{{ NGINX_USER }}"
+    group: "{{ NGINX_USER }}"
+    mode: 0775
+- name: Ansible copy SSL conf to the remote server
+  template:
+    src: ssl.conf.j2
+    dest: "{{CONF_D}}/ssl.conf"
+    owner: "{{ NGINX_USER }}"
+    group: "{{ NGINX_USER }}"
+    mode: 0664
+
+- name: Ansible copy default conf to the remote server
+  template:
+    src: default.conf.j2
+    dest: "{{NGINX_ROOT}}/sites-available/default"
+    owner: "{{ NGINX_USER }}"
+    group: "{{ NGINX_USER }}"
+    mode: 0664
+
+- name: Copy Application Content to Root Directory
+  copy:
+    src: web
+    dest: "{{CONTENT_ROOT}}/"
+    owner: "{{ NGINX_USER }}"
+    group: "{{ NGINX_USER }}"
+    mode: 0775

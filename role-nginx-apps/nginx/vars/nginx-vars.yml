@@ -1,0 +1,4 @@
+NGINX_ROOT: "/etc/nginx"
+CONTENT_ROOT: "/usr/share/nginx/html"
+DOMAIN_NAME:  "ansibleproject.lab"
+CONF_D: "/etc/nginx/conf.d"
